@@ -1,6 +1,6 @@
 # flutter_watter_app_deom
 
-A new Flutter project.
+Weather application implemented with flutter and clean architecture
 
 ## Getting Started
 
