@@ -1,4 +1,4 @@
-# flutter_watter_app_deom
+# flutter_Weather_app_deom
 
 Weather application implemented with flutter and clean architecture
 
