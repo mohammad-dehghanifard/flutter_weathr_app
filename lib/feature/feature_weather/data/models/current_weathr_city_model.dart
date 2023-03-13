@@ -45,7 +45,7 @@ class CurrentWeatherCityModel extends CurrentWeatherCityEntity {
           .map((item) => WeatherDescription.fromJson(item))
           .toList(),
       base: json['base'],
-      main: Main.fromJson(json['main']),
+      main: json['main'] != null ? Main.fromJson(json['main']) : null,
       visibility: json['visibility'],
       wind: json['wind'] != null? Wind.fromJson(json['wind']) : null,
       rain: json['rain'] != null ? Rain.fromJson(json['rain']) : null,
