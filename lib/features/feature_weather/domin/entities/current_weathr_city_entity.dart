@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_watter_app_deom/feature/feature_weather/data/models/current_weathr_city_model.dart';
+import 'package:flutter_watter_app_deom/features/feature_weather/data/models/current_weathr_city_model.dart';
 
 class CurrentWeatherCityEntity extends Equatable{
 
