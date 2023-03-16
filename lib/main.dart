@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_watter_app_deom/core/widgets/main_wrapper.dart';
+import 'package:flutter_watter_app_deom/locator.dart';
 
-void main() {
+void main() async {
+  await serviceLocatorSetup();
   runApp(const MyApp());
 }
 
