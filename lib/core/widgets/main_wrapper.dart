@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/cw_status.dart';
-import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/home_bloc.dart';
+import 'package:flutter_watter_app_deom/core/widgets/app_background/app_background.dart';
+import 'package:flutter_watter_app_deom/core/widgets/bottom_navigation/bottom_navigation_bar.dart';
+import 'package:flutter_watter_app_deom/features/feature_bookmark/presention/screens/book_mark_screen.dart';
+import 'package:flutter_watter_app_deom/features/feature_weather/presention/screens/home_screen.dart';
+import 'package:intl/intl.dart';
 
-class MainWrapper extends StatefulWidget {
-  const MainWrapper({Key? key}) : super(key: key);
-
-  @override
-  State<MainWrapper> createState() => _MainWrapperState();
-}
-
-class _MainWrapperState extends State<MainWrapper> {
-
-  @override
-  void initState() {
-    BlocProvider.of<HomeBloc>(context).add(LoadCwEvent(cityName: 'Shiraz'));
-    super.initState();
-  }
+class MainWrapper extends StatelessWidget {
+  MainWrapper({Key? key}) : super(key: key);
+  final PageController pageController = PageController();
+  final List<Widget> pageList = const [HomeScreen(),BookMarkScreen()];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<HomeBloc,HomeState>(
-        builder: (context, state) {
-          if(state.cwStatus is CwLoading){
-            return const Center(child: Text('loading...'));
-          }
-          if(state.cwStatus is CwCompleted){
-            return const Center(child: Text('completed...'));
-          }
-          if(state.cwStatus is CwError){
-            return const Center(child: Text('error'));
-          }
-          return Center(child: Text(state.toString()),);
 
-        },
-      ),
+    DateTime currentTime = DateTime.now(); // دریافت تایم فعلی
+    String formatDate = DateFormat('kk').format(currentTime); // kk => ساعت رو به صورت رند بدون در نظر گرفتن دقیقه برمیگردونه
+
+    //page size
+    final Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      extendBody: true, // کل صفحه زیر {bottomNavigationBar} قرار میگیره
+      bottomNavigationBar: AppBottomNav(controller: pageController) ,
+      body: Container(
+        height: size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AppBackGround.getAppBackGround(formatDate),
+            fit: BoxFit.cover
+          ),
+        ),
+        child: PageView(
+          controller: pageController,
+          children: pageList,
+        ),
+      )
     );
   }
 }

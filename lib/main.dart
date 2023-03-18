@@ -13,7 +13,7 @@ void main() async {
         providers: [
           BlocProvider(create: (_) => HomeBloc(locator())),
         ],
-        child: const MainWrapper(),
+        child: MainWrapper(),
       )
   ));
 }

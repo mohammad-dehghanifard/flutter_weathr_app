@@ -17,6 +17,7 @@ class CurrentWeatherCityModel extends CurrentWeatherCityEntity{
     String? name,
     int? cod,
   }) : super(
+    // هم زمان که داریم کلاس مدل رو مقدار دهی میکنیم مقدار ها رو برای کلاس {Entity} هم ارسال میکنیم
       coord: coord,
       weather: weather,
       base: base,
