@@ -4,12 +4,11 @@ import 'package:flutter_watter_app_deom/features/feature_weather/data/models/cur
 class CurrentWeatherCityEntity extends Equatable{
 
   final Coord? coord;
-  final List<WeatherDescription>? weather;
+  final List<Weather>? weather;
   final String? base;
   final Main? main;
   final int? visibility;
   final Wind? wind;
-  final Rain? rain;
   final Clouds? clouds;
   final int? dt;
   final Sys? sys;
@@ -26,7 +25,6 @@ class CurrentWeatherCityEntity extends Equatable{
       this.main,
       this.visibility,
       this.wind,
-      this.rain,
       this.clouds,
       this.dt,
       this.sys,

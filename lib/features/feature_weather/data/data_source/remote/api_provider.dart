@@ -16,7 +16,7 @@ class ApiProvider{
           "units" : "metric"
          }
     );
-    debugPrint(response.data);
-    return response.data;
+    debugPrint(response.data.toString());
+    return response;
   }
 }

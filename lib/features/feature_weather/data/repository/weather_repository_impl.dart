@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_watter_app_deom/core/resourses/data_state.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/data/data_source/remote/api_provider.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/data/models/current_weathr_city_model.dart';
@@ -20,6 +21,7 @@ class WeatherRepositoryImpl implements WeatherRepository{
         return const DataFiled("خطایی به وجود آمده است. لطفا دوباره امتحان کنید");
       }
     }catch(e){
+      debugPrint(e.toString());
       return const DataFiled("ارتباط با سرور با مشکل مواجه شده است. لطفا با پشتیبانی تماس بگیرید");
     }
   }
