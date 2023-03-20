@@ -10,6 +10,7 @@ import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/home_bloc.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/widgets/fore_cast_widget/fore_cast_weather_widget.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/widgets/indicator/inficator_widget.dart';
+import 'package:flutter_watter_app_deom/features/feature_weather/presention/widgets/search_widget/search_text_field_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,14 +21,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  //page view controller
+  final PageController pageController = PageController();
+
   String cityName = "Tehran";
   @override
   void initState() {
     super.initState();
     BlocProvider.of<HomeBloc>(context).add(LoadCwEvent(cityName: cityName ));
   }
-  //page view controller
-  final PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // search field
+          AppSearchTextField(),
+          // main ui
           BlocBuilder<HomeBloc,HomeState>(
             buildWhen: (previous, current) {
               if(current.cwStatus == previous.cwStatus){
@@ -69,47 +75,50 @@ class _HomeScreenState extends State<HomeScreen> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             if(index == 0){
-                              return Column(
-                                children: [
-                                  // city name
-                                  Text(data.name!,style: const TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),),
-                                  SizedBox(height: size.height * 0.01),
-                                  // weather description
-                                  Text(data.weather![0].description!,style: const TextStyle(color: Colors.grey,fontSize: 18)),
-                                  // weather icon
-                                  AppBackGround.setIconForMain(data.weather![0].description!, size.width * 0.5),
-                                  // main weather
-                                  Text("${data.main!.temp!.round()}\u00B0",style: const TextStyle(color: Colors.white,fontSize: 42,fontWeight: FontWeight.bold)),
-                                  SizedBox(height: size.height * 0.02),
-                                  //max and main weather
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // max temp weather
-                                      Column(
-                                        children: [
-                                          const Text("max",style: TextStyle(color: Colors.grey,fontSize: 16)),
+                              return SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(
+                                  children: [
+                                    // city name
+                                    Text(data.name!,style: const TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),),
+                                    SizedBox(height: size.height * 0.01),
+                                    // weather description
+                                    Text(data.weather![0].description!,style: const TextStyle(color: Colors.grey,fontSize: 18)),
+                                    // weather icon
+                                    AppBackGround.setIconForMain(data.weather![0].description!, size.width * 0.5),
+                                    // main weather
+                                    Text("${data.main!.temp!.round()}\u00B0",style: const TextStyle(color: Colors.white,fontSize: 42,fontWeight: FontWeight.bold)),
+                                    SizedBox(height: size.height * 0.02),
+                                    //max and main weather
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        // max temp weather
+                                        Column(
+                                          children: [
+                                            const Text("max",style: TextStyle(color: Colors.grey,fontSize: 16)),
+                                            SizedBox(height: size.height * 0.003),
+                                            Text("${data.main!.tempMax!.round()}\u00B0",style: const TextStyle(color: Colors.white,fontSize: 20)),
+                                          ],
+                                        ),
+                                        // divider
+                                        Container(
+                                          margin: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                                          width: 1,
+                                          height: 45,
+                                          color: Colors.grey,
+                                        ),
+                                        // main weather
+                                        Column(children: [
+                                          const Text("main",style: TextStyle(color: Colors.grey,fontSize: 16)),
                                           SizedBox(height: size.height * 0.003),
-                                          Text("${data.main!.tempMax!.round()}\u00B0",style: const TextStyle(color: Colors.white,fontSize: 20)),
+                                          Text("${data.main!.tempMin!.round()}\u00B0",style: const TextStyle(color: Colors.white,fontSize: 20)),
                                         ],
-                                      ),
-                                      // divider
-                                      Container(
-                                        margin: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-                                        width: 1,
-                                        height: 45,
-                                        color: Colors.grey,
-                                      ),
-                                      // main weather
-                                      Column(children: [
-                                        const Text("main",style: TextStyle(color: Colors.grey,fontSize: 16)),
-                                        SizedBox(height: size.height * 0.003),
-                                        Text("${data.main!.tempMin!.round()}\u00B0",style: const TextStyle(color: Colors.white,fontSize: 20)),
-                                      ],
-                                      ),
-                                    ],)
+                                        ),
+                                      ],)
 
-                                ],
+                                  ],
+                                ),
                               );
                             }else{
                               return Container(color: Colors.blue);
@@ -135,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Divider
                     const Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 6),
-                      child:  Divider(color: Colors.grey,height: 5,),
+                      child:  Divider(color: Colors.grey,height: 8,),
                     ),
                     // fore cast 7days weather ui
                     SizedBox(

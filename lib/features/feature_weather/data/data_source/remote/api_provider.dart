@@ -34,4 +34,16 @@ class ApiProvider{
     debugPrint(response.data.toString());
     return response;
   }
+
+  Future<dynamic> callSearchApi(String prefix) async {
+    Response response = await _dio.get(
+        Constants.searchApiUrl,
+        queryParameters: {
+          'limit': 7,
+          'offset': 0,
+          'namePrefix': prefix
+        }
+    );
+    return response;
+  }
 }
