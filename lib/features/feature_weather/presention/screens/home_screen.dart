@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_watter_app_deom/core/params/fore_cast_param.dart';
 import 'package:flutter_watter_app_deom/core/widgets/app_background/app_background.dart';
 import 'package:flutter_watter_app_deom/core/widgets/loading/loading_widget.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/domin/entities/current_weathr_city_entity.dart';
+import 'package:flutter_watter_app_deom/features/feature_weather/domin/entities/fore_cast_weather_entity.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/cw_status.dart';
+import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/fw_status.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/home_bloc.dart';
+import 'package:flutter_watter_app_deom/features/feature_weather/presention/widgets/fore_cast_widget/fore_cast_weather_widget.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/widgets/indicator/inficator_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -34,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           BlocBuilder<HomeBloc,HomeState>(
             buildWhen: (previous, current) {
-              if(current == previous){
+              if(current.cwStatus == previous.cwStatus){
                 return false;
               }else{
                 return true;
@@ -48,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
               // دریافت اطلاعات
               CwCompleted cwCompleted = state.cwStatus as CwCompleted;
               CurrentWeatherCityEntity data = cwCompleted.currentWeatherCityEntity;
+              // call fore cast 7 days weather
+              BlocProvider.of<HomeBloc>(context).add(LoadFwEvent(pram: ForeCastPram(lat: data.coord!.lat!,lon: data.coord!.lon!)));
               // ui
               return Expanded(
                 child: ListView(
@@ -120,10 +126,65 @@ class _HomeScreenState extends State<HomeScreen> {
                             dotColor: Colors.grey,
                             activeDotColor: Colors.white,
                             dotHeight: 8,
-                            dotWidth: 12
+                            dotWidth: 10
                         ),
                       )
-                    )
+                    ),
+                    SizedBox(height: size.height * 0.05),
+
+                    // Divider
+                    const Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 6),
+                      child:  Divider(color: Colors.grey,height: 5,),
+                    ),
+                    // fore cast 7days weather ui
+                    SizedBox(
+                      width: double.infinity,
+                      height: size.height / 6.4,
+                      child: Center(
+                        child: BlocBuilder<HomeBloc,HomeState>(
+                          buildWhen: (previous, current) {
+                            if(current.fwStatus == previous.fwStatus){
+                              return false;
+                            }else{
+                              return true;
+                            }
+                          },
+                          builder: (context, state) {
+                            // fw loading
+                            if(state.fwStatus is FwLoading){
+                                return const AppLoading(color: Colors.white, size: 50);
+                            }
+
+                            if(state.fwStatus is FwCompleted){
+                              FwCompleted fwCompleted = state.fwStatus as FwCompleted;
+                              ForecastDaysEntity data = fwCompleted.entity;
+
+                              return ListView.builder(
+                                  itemCount: data.daily!.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder:(context, index) {
+                                   final item = data.daily![index];
+                                    return Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: ForeCastWeather(item: item, size: size),
+                                    );
+                                  },
+                              );
+                            }
+                            if(state.fwStatus is FwError){
+                              return const Center(child: Text("خطایی به وجود اومده",style: TextStyle(color: Colors.white)));
+                            }
+                            return Container();
+                          },
+                        ),
+                      ),
+                    ),
+                    // Divider
+                    const Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 6),
+                      child:  Divider(color: Colors.grey,height: 12,),
+                    ),
                   ],
                 ),
               );
@@ -134,3 +195,4 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 }
+

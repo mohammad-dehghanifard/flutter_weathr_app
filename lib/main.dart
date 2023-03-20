@@ -11,7 +11,7 @@ void main() async {
       title: 'Water App Demo',
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => HomeBloc(locator())),
+          BlocProvider(create: (_) => HomeBloc(locator(),locator())),
         ],
         child: MainWrapper(),
       )
