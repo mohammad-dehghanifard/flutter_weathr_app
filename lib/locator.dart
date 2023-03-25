@@ -1,4 +1,5 @@
 
+import 'package:flutter_watter_app_deom/features/feature_bookmark/data/data_source/local/book_mark_db.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/data/data_source/remote/api_provider.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/data/repository/weather_repository_impl.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/domin/repository/weather_repository.dart';
@@ -9,7 +10,7 @@ import 'package:get_it/get_it.dart';
 
 GetIt locator = GetIt.instance;
 
-serviceLocatorSetup(){
+serviceLocatorSetup() async {
 
  //api provider
  locator.registerSingleton<ApiProvider>(ApiProvider());
@@ -23,4 +24,9 @@ serviceLocatorSetup(){
 
  //blocs
  locator.registerSingleton<HomeBloc>(HomeBloc(locator(),locator()));
+
+ //local database
+ final localDatabase = await $FloorBookMarkDatabase.databaseBuilder('book_mark_database.db').build();
+ locator.registerSingleton<BookMarkDatabase>(localDatabase);
+
 }

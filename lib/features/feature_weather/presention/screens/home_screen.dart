@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+
         children: [
           // search field
           AppSearchTextField(),
