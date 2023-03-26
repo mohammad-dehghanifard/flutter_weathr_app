@@ -32,6 +32,7 @@ class BookMarkBloc extends Bloc<BookMarkEvent, BookMarkState> {
       },
     );
 
+    // save city bookmark
     on<SaveCwEvent>(
       (event, emit) async {
         //emit loading

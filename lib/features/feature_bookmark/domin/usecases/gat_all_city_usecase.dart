@@ -14,3 +14,4 @@ class GetAllCityUseCase implements UseCase<DataState<List<CityEntity>>,NoParams>
 
 
 }
+

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_watter_app_deom/core/params/fore_cast_param.dart';
 import 'package:flutter_watter_app_deom/core/widgets/app_background/app_background.dart';
 import 'package:flutter_watter_app_deom/core/widgets/loading/loading_widget.dart';
+import 'package:flutter_watter_app_deom/features/feature_bookmark/presention/bloc/book_mark_bloc.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/domin/entities/current_weathr_city_entity.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/domin/entities/fore_cast_weather_entity.dart';
 import 'package:flutter_watter_app_deom/features/feature_weather/presention/bloc/cw_status.dart';
@@ -37,10 +38,36 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Column(
-
         children: [
-          // search field
-          AppSearchTextField(),
+          // search field and book mark icon
+          Row(
+            children: [
+              Expanded(child: AppSearchTextField()),
+              const SizedBox(width: 6,),
+              // زمانی که اطلاعات شهر داره لود میشه ایکون بوکمارک هم به حالت لودینگ میبره
+              BlocBuilder<HomeBloc,HomeState>(
+                buildWhen: (previous, current) {
+                  if(current.cwStatus == previous.cwStatus){
+                    return false;
+                  }
+                  return true;
+                },
+                  builder: (context, state) {
+                  // show loading
+                  if(state.cwStatus is CwLoading){
+                    return const CircularProgressIndicator(color: Colors.white);
+                  }
+                  // completed
+                  if(state.cwStatus is CwCompleted){
+                   final CwCompleted data = state.cwStatus as CwCompleted;
+                   //BlocProvider.of<BookMarkBloc>(context).add(GetCityByNameEvent(data.currentWeatherCityEntity.name!));
+                  }
+                  // show error
+                    return Container();
+                  },
+              )
+            ],
+          ),
           // main ui
           BlocBuilder<HomeBloc,HomeState>(
             buildWhen: (previous, current) {
